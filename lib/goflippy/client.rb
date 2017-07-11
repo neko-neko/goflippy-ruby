@@ -6,11 +6,13 @@ module GoFlippy
       @store = GoFlippy::MemoryStore.new
       @http_client = HttpClient.new(@api_key, @config)
       @poller = Poller.new(@config.polling_interval, @http_client, @store)
+      @processor = GoFlippy::Processor.new(@http_client)
     end
 
     def start
       # TODO: Implement logger
       @poller.start
+      @processor.start
     end
 
     def enabled?(key, uid)

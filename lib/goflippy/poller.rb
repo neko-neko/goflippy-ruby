@@ -1,5 +1,3 @@
-require 'thread'
-
 module GoFlippy
   class Poller
     def initialize(polling_interval, http_client, store)
@@ -10,17 +8,8 @@ module GoFlippy
 
     def start
       # TODO: Implement logger
-      Thread.new do
-        loop do
-          begin
-            started_at = Time.now
-            task
-            interval = @polling_interval - (Time.now - started_at)
-            sleep(interval) if interval.positive?
-          rescue StandardError => e
-            # TODO: Implement logger
-          end
-        end
+      GoFlippy::Worker.create(@polling_interval) do
+        task
       end
     end
 
