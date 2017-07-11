@@ -3,13 +3,8 @@ module GoFlippy
     def initialize(api_key, config)
       @api_key = api_key
       @config = config || Config.default
-      @store = MemoryStore.new()
-      @http_client = HttpClient.new(
-        @api_key,
-        @config.api_uri,
-        @config.open_timeout,
-        @config.read_timeout
-      )
+      @store = GoFlippy::MemoryStore.new
+      @http_client = HttpClient.new(@api_key, @config)
       @poller = Poller.new(@config.polling_interval, @http_client, @store)
     end
 

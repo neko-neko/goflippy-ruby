@@ -14,9 +14,9 @@ module GoFlippy
         loop do
           begin
             started_at = Time.now
-            poll()
+            task
             interval = @polling_interval - (Time.now - started_at)
-            sleep(interval) if interval > 0
+            sleep(interval) if interval.positive?
           rescue StandardError => e
             # TODO: Implement logger
           end
@@ -26,15 +26,15 @@ module GoFlippy
 
     private
 
-    def poll
-      @store.each do |key, uids|
-        features = {}
+    def task
+      @http_client.get('/features')&.each do |feature|
+        uids = @store.find(feature[:key])
         uids.each do |uid|
-          feature = @http_client.get("/users/#{uid}/features/#{key}")
-          features[uid.to_sym] = feature['enabled']
+          enabled = !!@http_client.get("/users/#{uid}/features/#{key}")&.dig(uid.to_sym)
+          @store.put(feature[:key], { uid: uid.to_sym, enabled: enabled })
         end
-        @store.put(key, features)
       end
+      @store.refresh!
     end
   end
 end

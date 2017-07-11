@@ -3,7 +3,7 @@ require 'concurrent'
 module GoFlippy
   class MemoryStore
     def initialize
-      @store = Concurrent::Map.new
+      @store = Concurrent::Hash.new({})
     end
 
     def find(key)
@@ -12,6 +12,10 @@ module GoFlippy
 
     def put(key, val)
       @store[key.to_sym] = val
+    end
+
+    def refresh!(hash)
+      @store = Concurrent::Hash.new(@store.select { |k, _| hash.include?(k) })
     end
   end
 end
