@@ -13,7 +13,6 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/neko-neko/goflippy-ruby'
   spec.license       = 'MIT'
   spec.require_paths = ['lib']
-  spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end

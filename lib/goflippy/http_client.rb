@@ -8,9 +8,9 @@ module GoFlippy
 
     def initialize(api_key, opts = {})
       @api_key = api_key
-      @api_uri = opts[:api_uri]
-      @open_timeout = opts[:open_timeout]
-      @read_timeout = opts[:read_timeout]
+      @api_uri = opts.api_uri
+      @open_timeout = opts.open_timeout
+      @read_timeout = opts.read_timeout
     end
 
     def get(path, params = {})

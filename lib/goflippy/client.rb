@@ -1,12 +1,12 @@
 module GoFlippy
   class Client
-    def initialize(api_key, config)
+    def initialize(api_key, opts = {})
       @api_key = api_key
-      @config = config || Config.default
-      @store = GoFlippy::MemoryStore.new
+      @config = opts&.empty? ? Config.default : Config.new(opts)
+      @store = MemoryStore.new
       @http_client = HttpClient.new(@api_key, @config)
       @poller = Poller.new(@config.polling_interval, @http_client, @store)
-      @processor = GoFlippy::Processor.new(@http_client)
+      @processor = Processor.new(@http_client)
     end
 
     def start

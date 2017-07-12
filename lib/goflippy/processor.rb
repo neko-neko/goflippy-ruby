@@ -11,15 +11,9 @@ module GoFlippy
     def start
       # TODO: Implement logger
       GoFlippy::Worker.create(@processing_interval) do
-        task
+        return if @queue.empty?
       end
     end
 
-    private
-
-    def task
-      return if @queue.empty?
-      # TODO: implement here
-    end
   end
 end
