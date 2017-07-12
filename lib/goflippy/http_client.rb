@@ -4,6 +4,7 @@ require 'json'
 
 module GoFlippy
   class HttpClient
+    include Logger
     HTTP_API_KEY_HEADER = 'X-Api-Key'
 
     def initialize(api_key, opts = {})
@@ -18,7 +19,7 @@ module GoFlippy
 
       req = Net::HTTP::Get.new(uri.request_uri)
       req['Accept'] = 'application/json'
-      req[GoFlippy::HTTP_API_KEY_HEADER] = 'application/json'
+      req[HTTP_API_KEY_HEADER] = 'application/json'
       request(uri, req)
     end
 
@@ -28,7 +29,7 @@ module GoFlippy
       req = Net::HTTP::Post.new(uri.request_uri)
       req['Accept'] = 'application/json'
       req['Content-Type'] = 'application/json'
-      req[GoFlippy::HTTP_API_KEY_HEADER] = 'application/json'
+      req[HTTP_API_KEY_HEADER] = 'application/json'
       req.body = params.to_json unless params.empty?
       request(uri, req)
     end
@@ -51,19 +52,19 @@ module GoFlippy
           http.read_timeout = @read_timeout
           http.request(req)
         end
+        case response
+          when Net::HTTPSuccess
+            json = response.body
+            JSON.parse(json, symbolize_names: true)
+          when Net::HTTPRedirection
+            request(URI.parse(response['location']), req)
+          else
+            Logger.error(response.value)
+        end
       rescue => e
-        # TODO: Implement logger
+        Logger.error(e)
       end
-
-      case response
-      when Net::HTTPSuccess
-        json = response.body
-        JSON.parse(json, symbolize_names: true)
-      when Net::HTTPRedirection
-        request(URI.parse(response['location']), req)
-      else
-        # TODO: Implement logger
-      end
+      response
     end
   end
 end

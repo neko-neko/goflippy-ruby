@@ -14,8 +14,8 @@ module GoFlippy
       @store[key.to_sym] = val
     end
 
-    def refresh!(hash)
-      @store = Concurrent::Hash.new(@store.select { |k, _| hash.include?(k) })
+    def refresh!(keys)
+      @store = Concurrent::Hash.new(@store.select { |k, _| keys.include?(k) })
     end
   end
 end

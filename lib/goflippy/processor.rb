@@ -1,6 +1,7 @@
 module GoFlippy
   class Processor
-    PROCESSING_INTERVAL = 0.1
+    include Logger
+    PROCESSING_INTERVAL = 1
 
     def initialize(http_client)
       @http_client = http_client
@@ -9,9 +10,9 @@ module GoFlippy
     end
 
     def start
-      # TODO: Implement logger
+      Logger.info('Start processing worker process')
       GoFlippy::Worker.create(@processing_interval) do
-        return if @queue.empty?
+        # TODO: implement here
       end
     end
 

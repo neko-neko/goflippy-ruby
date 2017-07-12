@@ -1,5 +1,7 @@
 module GoFlippy
   class Client
+    include Logger
+
     def initialize(api_key, opts = {})
       @api_key = api_key
       @config = opts&.empty? ? Config.default : Config.new(opts)
@@ -10,7 +12,7 @@ module GoFlippy
     end
 
     def start
-      # TODO: Implement logger
+      Logger.info('Start GoFlippy client')
       @poller.start
       @processor.start
     end

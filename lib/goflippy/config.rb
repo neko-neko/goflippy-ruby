@@ -1,5 +1,6 @@
 module GoFlippy
   class Config
+    include Logger
     DEFAULT_API_URI = 'http://localhost'
     DEFAULT_OPEN_TIMEOUT = 3
     DEFAULT_READ_TIMEOUT = 10
@@ -15,6 +16,7 @@ module GoFlippy
       @open_timeout = (opts[:open_timeout] || DEFAULT_OPEN_TIMEOUT)
       @read_timeout = (opts[:read_timeout] || DEFAULT_READ_TIMEOUT)
       @polling_interval = (opts[:polling_interval] || DEFAULT_POLLING_INTERVAL)
+      Logger.logger = opts[:logger] if opts[:logger]
     end
 
     def self.default

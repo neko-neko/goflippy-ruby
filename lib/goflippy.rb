@@ -1,5 +1,6 @@
-require 'goflippy/client'
+require 'goflippy/logger'
 require 'goflippy/config'
+require 'goflippy/client'
 require 'goflippy/http_client'
 require 'goflippy/memory_store'
 require 'goflippy/poller'

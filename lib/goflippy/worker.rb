@@ -2,6 +2,8 @@ require 'thread'
 
 module GoFlippy
   class Worker
+    include Logger
+
     def self.create(interval, &block)
       Thread.new do
         loop do
@@ -10,7 +12,7 @@ module GoFlippy
             yield
             sleep(interval) if (interval - (Time.now - started_at)).positive?
           rescue StandardError => e
-            # TODO: Implement logger
+            Logger.error(e)
           end
         end
       end
