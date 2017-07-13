@@ -15,9 +15,9 @@ module GoFlippy
       @poller.start
     end
 
-    def enabled?(key, uid)
+    def enabled?(key, uid, default)
       uids = @store.find(key)
-      uids[uid.to_sym]
+      uids&.dig(uid.to_sym) || default
     end
   end
 end
