@@ -8,13 +8,11 @@ module GoFlippy
       @store = MemoryStore.new
       @http_client = HttpClient.new(@api_key, @config)
       @poller = Poller.new(@config.polling_interval, @http_client, @store)
-      @processor = Processor.new(@http_client)
     end
 
     def start
       Logger.info('Start GoFlippy client')
       @poller.start
-      @processor.start
     end
 
     def enabled?(key, uid)
