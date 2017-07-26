@@ -55,7 +55,7 @@ module GoFlippy
         case response
           when Net::HTTPSuccess
             json = response.body
-            JSON.parse(json, symbolize_names: true)
+            return JSON.parse(json, symbolize_names: true)
           when Net::HTTPRedirection
             request(URI.parse(response['location']), req)
           else

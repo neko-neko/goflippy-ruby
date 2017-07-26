@@ -19,5 +19,14 @@ module GoFlippy
       uids = @store.find(key)
       uids&.dig(uid.to_sym) || default
     end
+
+    def register(uid, groups = [])
+      @store.put(uid, true)
+      params = {
+          uid: uid,
+          groups: groups
+      }
+      @http_client.post('/users', params)
+    end
   end
 end
