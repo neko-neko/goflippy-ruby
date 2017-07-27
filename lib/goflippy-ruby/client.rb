@@ -15,9 +15,15 @@ module GoFlippy
       @poller.start
     end
 
-    def enabled?(key, uid, default)
+    def enabled?(key, uid, default = false)
       uids = @store.find(key)
-      uids&.dig(uid.to_sym) || default
+      cache = uids&.dig(uid.to_sym)
+      if cache == nil
+        enabled = @http_client.get("/users/#{uid}/features/#{key}")&.dig(:enabled)
+        @store.put(key, { uid: uid.to_sym, enabled: enabled })
+        return enabled
+      end
+      cache
     end
 
     def register(uid, groups = [])

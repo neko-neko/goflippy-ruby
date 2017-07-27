@@ -15,7 +15,7 @@ module GoFlippy
         @http_client.get('/features')&.each do |feature|
           uids = @store.find(feature[:key])
           uids.each do |uid|
-            enabled = !!@http_client.get("/users/#{uid}/features/#{key}")&.dig(uid.to_sym)
+            enabled = @http_client.get("/users/#{uid}/features/#{key}")&.dig(:enabled)
             @store.put(feature[:key], { uid: uid.to_sym, enabled: enabled })
           end
           keys << feature[:key]
